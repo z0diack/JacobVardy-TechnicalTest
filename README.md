@@ -4,6 +4,7 @@
 
  # Controls
  WASD - Movement <br />
+ Space - Jump <br />
  Left Mouse - Pickup/Put down <br />
  E - Opens spawn menu <br />
  R - Delete object <br />
@@ -17,3 +18,6 @@
  2 - Spawn sphere<br />
  3 - Spawn cylinder<br />
  4 - Spawn pyramid <br />
+
+ # Showcase
+ https://www.youtube.com/watch?v=EzCTusIDI5Y
