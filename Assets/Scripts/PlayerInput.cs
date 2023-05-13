@@ -31,6 +31,7 @@ public class PlayerInput : MonoBehaviour
     public Canvas edit_menu_canvas;
     public GameObject player_options;
     public GameObject game_options;
+    private bool inEditMode;
 
     [Header("Pickup options")]
     public Camera cam;
@@ -228,18 +229,33 @@ public class PlayerInput : MonoBehaviour
     {
         RaycastHit hit;
         if (value.performed)
-            if (Physics.Raycast(cam.transform.position, cam.transform.TransformDirection(Vector3.forward), out hit, 10f))
-                if (hit.transform.gameObject.GetComponent<Pickupable>())
+        {            
+            if (false == inEditMode)
+            { // when entering edit mode
+                if (Physics.Raycast(cam.transform.position, cam.transform.TransformDirection(Vector3.forward), out hit, 10f))
                 {
-                    bool edit_menu_active = edit_menu_canvas.isActiveAndEnabled;
-                    edit_menu_canvas.enabled = !edit_menu_active;
-                    bool mouseLock = !edit_menu_active;
-                    LockMouse(!mouseLock);
-                    cam.GetComponent<PlayerCam>().enabled = edit_menu_active;
+                    if (hit.transform.gameObject.GetComponent<Pickupable>())
+                    {
+                        inEditMode = true;
+                        edit_menu_canvas.enabled = true;
+                        LockMouse(false);
+                        cam.GetComponent<PlayerCam>().enabled = false;
 
-                    itemEditing = hit.transform.gameObject;
-                    GetComponent<EditController>().findEditItem();
+                        itemEditing = hit.transform.gameObject;
+                        GetComponent<EditController>().findEditItem();
+                    }
                 }
+            }            
+            else 
+            { // When exiting edit mode   
+                inEditMode = false;
+                edit_menu_canvas.enabled = false;
+                LockMouse(true);
+                cam.GetComponent<PlayerCam>().enabled = true;            
+            }
+        }
+
+
     }
 
     private void SpawnCube(InputAction.CallbackContext value)
@@ -289,12 +305,10 @@ public class PlayerInput : MonoBehaviour
         if(value.performed)
             if(copiedObject != null)
             {
-                GameObject toSpawn = copiedObject;
-                toSpawn.GetComponent<Renderer>().material = GetComponent<MaterialChanger>().originalMaterial;
-                toSpawn.transform.position = new Vector3(0, 0, 0);
-                toSpawn.transform.parent = objectList.transform;
-                GameObject newSpawn = Instantiate(toSpawn, spawnPos);
-                
+                copiedObject.GetComponent<Renderer>().material = GetComponent<MaterialChanger>().originalMaterial;
+                GameObject newSpawn = Instantiate(copiedObject, spawnPos);
+                newSpawn.transform.parent = objectList.transform;
+                newSpawn.transform.position = spawnPos.transform.position;
             }
     }
 }
