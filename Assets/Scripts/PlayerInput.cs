@@ -12,33 +12,52 @@ public class PlayerInput : MonoBehaviour
 
 
     [Header("Movement Settings")]
+    [Tooltip("Movement speed for the player")]
     public float movementSpeed = 2f;
+    [Tooltip("Jump height for the player")]
     public float jumpHeight = 5f;
+    [Tooltip("Gravity for the player")]
     public float gravity = -9.81f;
     private float originalSpeed;
 
 
     [Header("Ground Settings")]
-    public Transform groundCheck;
+    [Tooltip("Empty object for the ground check function")]
+    [SerializeField]
+    Transform groundCheck;
+    [Tooltip("Radius for checksphere for ground check")]
     private float groundDistance = 0.4f;
-    public LayerMask groundMask;
+    [Tooltip("Layer for ground")]
+    [SerializeField]
+    LayerMask groundMask;
     private bool isGrounded;
 
 
     [Header("Menu Settings")]
-    public Canvas spawn_menu_canvas;
-    public Canvas main_menu_canvas;
-    public Canvas edit_menu_canvas;
-    public GameObject player_options;
-    public GameObject game_options;
+    [SerializeField]
+    Canvas spawnMenuCanvas;
+    [SerializeField]
+    Canvas mainMenuCanvas;
+    [SerializeField]
+    Canvas editMenuCanvas;
+    [SerializeField]
+    GameObject playerOptions;
+    [SerializeField]
+    GameObject gameOptions;
     private bool inEditMode;
 
     [Header("Pickup options")]
-    public Camera cam;
+    [SerializeField]
+    Camera cam;
+    [Tooltip("Position that objects will be picked up at")]
     public Transform pickupPosition;
-    public GameObject itemPicked;
+    [Tooltip("Object that is picked up")]
+    public GameObject objPicked;
+    [Tooltip("Boolean for ready for pickup")]
     public bool ready = true;
-    public GameObject itemEditing;
+    [Tooltip("Object that is being edited")]
+    public GameObject objEditing;
+    [Tooltip("Object in clipbaord")]
     public GameObject copiedObject;
 
 
@@ -53,9 +72,9 @@ public class PlayerInput : MonoBehaviour
 
     private void Start()
     {
-        spawn_menu_canvas.enabled = false;
-        main_menu_canvas.enabled = false;
-        edit_menu_canvas.enabled = false;
+        spawnMenuCanvas.enabled = false;
+        mainMenuCanvas.enabled = false;
+        editMenuCanvas.enabled = false;
         cam.GetComponent<PlayerCam>();
         objectList = GameObject.Find("Objects");
 
@@ -63,23 +82,25 @@ public class PlayerInput : MonoBehaviour
 
     private void Update()
     {
-        //MOVEMENT UPDATE
+        //MOVEMENT
         Vector2 inputVector = playerInputActions.Player.Movement.ReadValue<Vector2>();
         Vector3 movement = transform.right * inputVector.x + transform.forward * inputVector.y;
         controller.Move(movement * movementSpeed * Time.deltaTime);
 
-        //JUMPING UPDATE
+        //JUMPING 
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity *Time.deltaTime);
 
-        //GROUND CHECKER 
+        //GROUND CHECKER
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         if (isGrounded && velocity.y < 0)
             velocity.y = -1f;
 
         //Ray for pickup debugging
         //Debug.DrawRay(cam.transform.position, cam.transform.TransformDirection(Vector3.forward) * 50f, Color.red);
-        if (spawn_menu_canvas.isActiveAndEnabled || main_menu_canvas.isActiveAndEnabled || edit_menu_canvas.isActiveAndEnabled)
+
+        //Toggling pickup action if menus are open
+        if (spawnMenuCanvas.isActiveAndEnabled || mainMenuCanvas.isActiveAndEnabled || editMenuCanvas.isActiveAndEnabled)
         {
             playerInputActions.Player.Pickup.performed -= Pickup_performed;
         }else
@@ -91,6 +112,7 @@ public class PlayerInput : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
 
+        //Subscribing to actions
         playerInputActions = new CustomInput();
         playerInputActions.Player.Enable();
         playerInputActions.Player.Jump.performed += Jump;
@@ -108,7 +130,11 @@ public class PlayerInput : MonoBehaviour
         playerInputActions.Player.Paste.performed += Paste;
     }
 
-
+    /// <summary>
+    /// Movement system 
+    /// Takes input and translates to tranform on the player.
+    /// </summary>
+    /// <param name="value">Value for the movement input.</param>
     public void Movement_performed(InputAction.CallbackContext value)
     {
         Vector2 inputVector = value.ReadValue<Vector2>();
@@ -116,6 +142,11 @@ public class PlayerInput : MonoBehaviour
         controller.Move(movement * movementSpeed * Time.deltaTime);
     }
 
+    /// <summary>
+    /// Jumping system 
+    /// Checks if grounded then adds velocity to player in Y direction.
+    /// </summary>
+    /// <param name="value">Value of key pressed.</param>
     public void Jump(InputAction.CallbackContext value)
     {
         if (value.performed && isGrounded)
@@ -124,83 +155,121 @@ public class PlayerInput : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Spawn Menu
+    /// Enables the spawn menu and unlocks the mouse for use.
+    /// </summary>
+    /// <param name="value">Value of key pressed.</param>
     public void SpawnMenu(InputAction.CallbackContext value)
     {
-        if (value.performed && main_menu_canvas.enabled == false && edit_menu_canvas.enabled == false)
+        if (value.performed && false == mainMenuCanvas.enabled && false == editMenuCanvas.enabled)
         {
-            bool spawn_menu_active = spawn_menu_canvas.isActiveAndEnabled;
-            spawn_menu_canvas.enabled = !spawn_menu_active;
+            bool spawn_menu_active = spawnMenuCanvas.isActiveAndEnabled;
+            spawnMenuCanvas.enabled = !spawn_menu_active;
+            //Locks/unlocks mouse
             bool mouseLock = !spawn_menu_active;
             LockMouse(!mouseLock);
             cam.GetComponent<PlayerCam>().enabled = spawn_menu_active;
         }
     }
-
+    /// <summary>
+    /// Main menu
+    /// Enables the main menu, pauses the timescale and unlocks the mouse for use.
+    /// </summary>
+    /// <param name="value">Value of key pressed.</param>
     public void MainMenu(InputAction.CallbackContext value)
     {
-        if (value.performed && spawn_menu_canvas.enabled == false && edit_menu_canvas.enabled == false)
+        if (value.performed && false == spawnMenuCanvas.enabled   && false == editMenuCanvas.enabled)
         {
-            bool main_menu_active = main_menu_canvas.isActiveAndEnabled;
-            main_menu_canvas.enabled = !main_menu_active;
+            bool main_menu_active = mainMenuCanvas.isActiveAndEnabled;
+            mainMenuCanvas.enabled = !main_menu_active;
+            //Locks/unlocks mouse
             bool mouseLock = !main_menu_active;
             LockMouse(!mouseLock);
             cam.GetComponent<PlayerCam>().enabled = main_menu_active;
+            //Pauses the game
             bool pausedBool = !main_menu_active;
             Paused(pausedBool);
-            player_options.SetActive(true);
-            game_options.SetActive(false);
+            //Sets main menu active
+            playerOptions.SetActive(true);
+            gameOptions.SetActive(false);
         }
     }
-
+    /// <summary>
+    /// Paused function
+    /// Used to pause the timescale in the game.
+    /// </summary>
+    /// <param name="tf">True/False boolean for either 0f or 1f timescale.</param>
     private void Paused(bool tf)
     {
-        if(tf == true)
+        if(true == tf)
             Time.timeScale = 0f;
-        if(tf == false)
+        if(false ==  tf)
             Time.timeScale = 1.0f;
     }
-
+    /// <summary>
+    /// Lock mouse function
+    /// Used to lock the mouse for the player.
+    /// </summary>
+    /// <param name="tf">True/False boolean to either lock or unlock the mouse.</param>
     private void LockMouse(bool tf)
     {
-        if (tf == true)
+        if (true == tf)
             Cursor.lockState = CursorLockMode.Locked;
-        if (tf == false)
+        if (false == tf)
             Cursor.lockState = CursorLockMode.None;
         Cursor.visible = !tf;
     }
 
-
+    /// <summary>
+    /// Pickup System
+    /// Uses raycast to hit the object wanting to be picked up and then changes the parent if picked up.
+    /// Has a 0.2 second delay on being able to pickup/putdown so is not spammed.
+    /// </summary>
+    /// <param name="value">Value of the key pressed.</param>
     public void Pickup_performed(InputAction.CallbackContext value)
     {
         RaycastHit hit;
         if (value.performed)
         {
-            if(ready == true)
+            if(true == ready)
                 if (Physics.Raycast(cam.transform.position, cam.transform.TransformDirection(Vector3.forward), out hit, 10f))
                 {
                     if (hit.transform.gameObject.GetComponent<Pickupable>())
                     {
+                        //Sets the object to the pickedup state
                         hit.transform.gameObject.GetComponent<Pickupable>().SetPickedUp(pickupPosition, true);
-                        itemPicked = hit.transform.gameObject;
+                        objPicked = hit.transform.gameObject;
+                        //Delay
                         StartCoroutine(readyBoolean(0.2f));
                     }
                 }
-            if (ready == false)
+            if (false == ready)
             {
-                itemPicked.GetComponent<Pickupable>().SetPickedUp(itemPicked.transform, false);
-                itemPicked = null;
+                objPicked.GetComponent<Pickupable>().SetPickedUp(objPicked.transform, false);
+                objPicked = null;
                 StartCoroutine(readyBoolean(0.2f));
             }
         }
     }
 
+    /// <summary>
+    /// Delay function for pickup
+    /// Used as a delay for when a player picks up/puts down an object so is not spammed.
+    /// </summary>
+    /// <param name="delay">The seconds of delay as a float.</param>
+    /// <returns>Returns the delay</returns>
     IEnumerator readyBoolean(float delay)
     {
         yield return new WaitForSeconds(delay);
         ready = !ready;
-        
     }
 
+    /// <summary>
+    /// Delete function
+    /// Uses a raycast and if the object is one that is pickupable then the object is deleted on press.
+    /// </summary>
+    /// <param name="value">value for key being pressed.</param>
     private void Delete(InputAction.CallbackContext value)
     {
         RaycastHit hit;
@@ -214,6 +283,11 @@ public class PlayerInput : MonoBehaviour
             }
     }
 
+    /// <summary>
+    /// Edit function
+    /// Enables the edit menu as well as gets the current object being hit by raycast so that it can be edited.
+    /// </summary>
+    /// <param name="value">Value for key being pressed.</param>
     private void Edit(InputAction.CallbackContext value)
     {
         RaycastHit hit;
@@ -226,19 +300,19 @@ public class PlayerInput : MonoBehaviour
                     if (hit.transform.gameObject.GetComponent<Pickupable>())
                     {
                         inEditMode = true;
-                        edit_menu_canvas.enabled = true;
+                        editMenuCanvas.enabled = true;
                         LockMouse(false);
                         cam.GetComponent<PlayerCam>().enabled = false;
-
-                        itemEditing = hit.transform.gameObject;
-                        GetComponent<EditController>().findEditItem();
+                        //Passed the item being hit back to the edit controller
+                        objEditing = hit.transform.gameObject;
+                        GetComponent<EditController>().FindObjectEditing();
                     }
                 }
             }            
             else 
             { // When exiting edit mode   
                 inEditMode = false;
-                edit_menu_canvas.enabled = false;
+                editMenuCanvas.enabled = false;
                 LockMouse(true);
                 cam.GetComponent<PlayerCam>().enabled = true;            
             }
@@ -247,6 +321,11 @@ public class PlayerInput : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Spawn cube function
+    /// When pressed will spawn a new cube in the spawnPos.
+    /// </summary>
+    /// <param name="value">Value for key being pressed.</param>
     private void SpawnCube(InputAction.CallbackContext value)
     {
         if (value.performed)
@@ -255,6 +334,12 @@ public class PlayerInput : MonoBehaviour
             newSpawn.transform.parent = objectList.transform;
         }
     }
+
+    /// <summary>
+    /// Spawn pyramid function
+    /// When pressed will spawn a new pyramid in the spawnPos.
+    /// </summary>
+    /// <param name="value">Value for key being pressed.</param>
     private void SpawnPyramid(InputAction.CallbackContext value)
     {
         if (value.performed)
@@ -263,6 +348,12 @@ public class PlayerInput : MonoBehaviour
             newSpawn.transform.parent = objectList.transform;
         }
     }
+
+    /// <summary>
+    /// Spawn cylinder function
+    /// When pressed will spawn a new cylinder in the spawnPos.
+    /// </summary>
+    /// <param name="value">Value for key being pressed.</param>
     private void SpawnCylinder(InputAction.CallbackContext value)
     {
         if (value.performed)
@@ -271,6 +362,12 @@ public class PlayerInput : MonoBehaviour
             newSpawn.transform.parent = objectList.transform;
         }
     }
+
+    /// <summary>
+    /// Spawn sphere function
+    /// When pressed will spawn a new sphere in the spawnPos.
+    /// </summary>
+    /// <param name="value">Value for key being pressed.</param>
     private void SpawnSphere(InputAction.CallbackContext value)
     {
         if (value.performed)
@@ -280,6 +377,11 @@ public class PlayerInput : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Copy function
+    /// Uses a raycast and if copy input is done, will copy the item and save it to be pasted.
+    /// </summary>
+    /// <param name="value">Value for key being pressed.</param>
     private void Copy(InputAction.CallbackContext value)
     {
         RaycastHit hit;
@@ -288,7 +390,11 @@ public class PlayerInput : MonoBehaviour
                 if (hit.transform.gameObject.GetComponent<Pickupable>())
                     copiedObject = hit.transform.gameObject;
     }
-
+    /// <summary>
+    /// Paste function
+    /// Uses the copied object to then spawn in the object again in the spawnPos.
+    /// </summary>
+    /// <param name="value">Value for key being pressed.</param>
     private void Paste(InputAction.CallbackContext value)
     {
         if(value.performed)

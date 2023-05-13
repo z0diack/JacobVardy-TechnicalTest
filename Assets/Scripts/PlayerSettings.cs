@@ -11,15 +11,18 @@ public class PlayerSettings : MonoBehaviour
     /// </summary>
     float playerSpeed;
     float playerJumpHeight;
-    float playerGravity;
 
     GameObject player;
 
     [Header("Min/Max values")]
-    public float speedMin;
-    public float speedMax;
-    public float jumpMin;
-    public float jumpMax;
+    [SerializeField]
+    float speedMin;
+    [SerializeField]
+    float speedMax;
+    [SerializeField]
+    float jumpMin;
+    [SerializeField]
+    float jumpMax;
 
 
     [Header("Input Fields")]
@@ -32,16 +35,19 @@ public class PlayerSettings : MonoBehaviour
 
     void Start()
     {
+        //Gets the current settings for speed and height.
         player = GameObject.Find("Player");
         playerSpeed = player.GetComponent<PlayerInput>().movementSpeed;
         playerJumpHeight = player.GetComponent<PlayerInput>().jumpHeight;
-        playerGravity = player.GetComponent<PlayerInput>().gravity;
 
+
+        //Sets the min/max values for the slider, sets value to current speed.
         speed.value = playerSpeed;
         speed.minValue = speedMin;
         speed.maxValue = speedMax;
         speed.onValueChanged.AddListener(ChangeSpeed);
 
+        //Sets the min/max values for the slider, sets value to current jump height.
         jumpHeight.value = playerJumpHeight;
         jumpHeight.minValue = jumpMin;
         jumpHeight.maxValue = jumpMax;
@@ -50,17 +56,25 @@ public class PlayerSettings : MonoBehaviour
 
     void Update()
     {
+        //Update the text on the menu.
         speedText.text = speed.value.ToString();
         jumpText.text = jumpHeight.value.ToString();
     }
 
 
-
+    /// <summary>
+    /// Changes the speed for the player.
+    /// </summary>
+    /// <param name="value">Value of the speed.</param>
     public void ChangeSpeed(float value)
     {
         player.GetComponent<PlayerInput>().movementSpeed = value;
     }
 
+    /// <summary>
+    /// Changes the jump height for the player.
+    /// </summary>
+    /// <param name="value">Value of the jump height.</param>
     public void ChangeJumpHeight(float value)
     {
         player.GetComponent<PlayerInput>().jumpHeight = value;

@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class PlayerCam : MonoBehaviour
 {
+    [Tooltip("Sensitivity for the player")]
     public float sens = 100f;
-    public Transform pos;
+    [SerializeField]
+    Transform pos;
 
+    [SerializeField]
     float xRotation;
+    [SerializeField]
     float yRotation;
 
     private void Start()

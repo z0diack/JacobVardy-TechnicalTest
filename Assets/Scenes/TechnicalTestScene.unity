@@ -4937,11 +4937,11 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 128
-  spawn_menu_canvas: {fileID: 291354617}
-  main_menu_canvas: {fileID: 1188828719}
-  edit_menu_canvas: {fileID: 721883043}
-  player_options: {fileID: 1133248930}
-  game_options: {fileID: 876306873}
+  spawnMenuCanvas: {fileID: 291354617}
+  mainMenuCanvas: {fileID: 1188828719}
+  editMenuCanvas: {fileID: 721883043}
+  playerOptions: {fileID: 1133248930}
+  gameOptions: {fileID: 876306873}
   cam: {fileID: 901758385}
   pickupPosition: {fileID: 1096027165}
   itemPicked: {fileID: 0}
