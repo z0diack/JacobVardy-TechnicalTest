@@ -214,6 +214,17 @@
                 },
                 {
                     "name": "",
+                    "id": "45a70b13-e6c6-45ad-88de-5f2dd60702c9",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Main Menu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "37fb7c8e-9331-402c-a647-7bebbc5c8044",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
