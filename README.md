@@ -21,3 +21,10 @@
 
  # Showcase
  https://www.youtube.com/watch?v=EzCTusIDI5Y
+ 
+ # References
+ Thank you to Key mouse for the skybox:
+ https://assetstore.unity.com/packages/2d/textures-materials/sky/customizable-skybox-174576
+ 
+ Thank you to KANIYONIKA for the primitives:
+ https://assetstore.unity.com/packages/tools/level-design/free-ultimate-procedural-primitives-227955
