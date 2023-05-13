@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 4741966029895199658}
   - component: {fileID: 2549394041916942754}
   - component: {fileID: 5341377232673654582}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pyramid
-  m_TagString: Untagged
+  m_TagString: Pickupable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
