@@ -46,15 +46,6 @@ public partial class @CustomInput : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Sprint"",
-                    ""type"": ""Button"",
-                    ""id"": ""5301a873-a5e1-4ce8-ba9a-e9899b40711a"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Spawn Menu"",
                     ""type"": ""Button"",
                     ""id"": ""8e0e1921-57d9-44cf-9251-6f838ceba31f"",
@@ -127,7 +118,7 @@ public partial class @CustomInput : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Spawn Capsule"",
+                    ""name"": ""Spawn Pyramid"",
                     ""type"": ""Button"",
                     ""id"": ""d751fc97-334c-4f24-86a1-64c42786e208"",
                     ""expectedControlType"": ""Button"",
@@ -218,17 +209,6 @@ public partial class @CustomInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Jump"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""1b9940e5-b335-447b-9f64-ce43f826c71e"",
-                    ""path"": ""<Keyboard>/shift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Sprint"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -327,7 +307,7 @@ public partial class @CustomInput : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Spawn Capsule"",
+                    ""action"": ""Spawn Pyramid"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -362,7 +342,6 @@ public partial class @CustomInput : IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
-        m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_SpawnMenu = m_Player.FindAction("Spawn Menu", throwIfNotFound: true);
         m_Player_MainMenu = m_Player.FindAction("Main Menu", throwIfNotFound: true);
         m_Player_Pickup = m_Player.FindAction("Pickup", throwIfNotFound: true);
@@ -371,7 +350,7 @@ public partial class @CustomInput : IInputActionCollection2, IDisposable
         m_Player_SpawnCube = m_Player.FindAction("Spawn Cube", throwIfNotFound: true);
         m_Player_SpawnSphere = m_Player.FindAction("Spawn Sphere", throwIfNotFound: true);
         m_Player_SpawnCylinder = m_Player.FindAction("Spawn Cylinder", throwIfNotFound: true);
-        m_Player_SpawnCapsule = m_Player.FindAction("Spawn Capsule", throwIfNotFound: true);
+        m_Player_SpawnPyramid = m_Player.FindAction("Spawn Pyramid", throwIfNotFound: true);
         m_Player_Copy = m_Player.FindAction("Copy", throwIfNotFound: true);
         m_Player_Paste = m_Player.FindAction("Paste", throwIfNotFound: true);
     }
@@ -435,7 +414,6 @@ public partial class @CustomInput : IInputActionCollection2, IDisposable
     private IPlayerActions m_PlayerActionsCallbackInterface;
     private readonly InputAction m_Player_Movement;
     private readonly InputAction m_Player_Jump;
-    private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_SpawnMenu;
     private readonly InputAction m_Player_MainMenu;
     private readonly InputAction m_Player_Pickup;
@@ -444,7 +422,7 @@ public partial class @CustomInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_SpawnCube;
     private readonly InputAction m_Player_SpawnSphere;
     private readonly InputAction m_Player_SpawnCylinder;
-    private readonly InputAction m_Player_SpawnCapsule;
+    private readonly InputAction m_Player_SpawnPyramid;
     private readonly InputAction m_Player_Copy;
     private readonly InputAction m_Player_Paste;
     public struct PlayerActions
@@ -453,7 +431,6 @@ public partial class @CustomInput : IInputActionCollection2, IDisposable
         public PlayerActions(@CustomInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
-        public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @SpawnMenu => m_Wrapper.m_Player_SpawnMenu;
         public InputAction @MainMenu => m_Wrapper.m_Player_MainMenu;
         public InputAction @Pickup => m_Wrapper.m_Player_Pickup;
@@ -462,7 +439,7 @@ public partial class @CustomInput : IInputActionCollection2, IDisposable
         public InputAction @SpawnCube => m_Wrapper.m_Player_SpawnCube;
         public InputAction @SpawnSphere => m_Wrapper.m_Player_SpawnSphere;
         public InputAction @SpawnCylinder => m_Wrapper.m_Player_SpawnCylinder;
-        public InputAction @SpawnCapsule => m_Wrapper.m_Player_SpawnCapsule;
+        public InputAction @SpawnPyramid => m_Wrapper.m_Player_SpawnPyramid;
         public InputAction @Copy => m_Wrapper.m_Player_Copy;
         public InputAction @Paste => m_Wrapper.m_Player_Paste;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
@@ -480,9 +457,6 @@ public partial class @CustomInput : IInputActionCollection2, IDisposable
                 @Jump.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
                 @Jump.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
                 @Jump.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
-                @Sprint.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprint;
-                @Sprint.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprint;
-                @Sprint.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprint;
                 @SpawnMenu.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpawnMenu;
                 @SpawnMenu.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpawnMenu;
                 @SpawnMenu.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpawnMenu;
@@ -507,9 +481,9 @@ public partial class @CustomInput : IInputActionCollection2, IDisposable
                 @SpawnCylinder.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpawnCylinder;
                 @SpawnCylinder.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpawnCylinder;
                 @SpawnCylinder.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpawnCylinder;
-                @SpawnCapsule.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpawnCapsule;
-                @SpawnCapsule.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpawnCapsule;
-                @SpawnCapsule.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpawnCapsule;
+                @SpawnPyramid.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpawnPyramid;
+                @SpawnPyramid.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpawnPyramid;
+                @SpawnPyramid.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpawnPyramid;
                 @Copy.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCopy;
                 @Copy.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCopy;
                 @Copy.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCopy;
@@ -526,9 +500,6 @@ public partial class @CustomInput : IInputActionCollection2, IDisposable
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
-                @Sprint.started += instance.OnSprint;
-                @Sprint.performed += instance.OnSprint;
-                @Sprint.canceled += instance.OnSprint;
                 @SpawnMenu.started += instance.OnSpawnMenu;
                 @SpawnMenu.performed += instance.OnSpawnMenu;
                 @SpawnMenu.canceled += instance.OnSpawnMenu;
@@ -553,9 +524,9 @@ public partial class @CustomInput : IInputActionCollection2, IDisposable
                 @SpawnCylinder.started += instance.OnSpawnCylinder;
                 @SpawnCylinder.performed += instance.OnSpawnCylinder;
                 @SpawnCylinder.canceled += instance.OnSpawnCylinder;
-                @SpawnCapsule.started += instance.OnSpawnCapsule;
-                @SpawnCapsule.performed += instance.OnSpawnCapsule;
-                @SpawnCapsule.canceled += instance.OnSpawnCapsule;
+                @SpawnPyramid.started += instance.OnSpawnPyramid;
+                @SpawnPyramid.performed += instance.OnSpawnPyramid;
+                @SpawnPyramid.canceled += instance.OnSpawnPyramid;
                 @Copy.started += instance.OnCopy;
                 @Copy.performed += instance.OnCopy;
                 @Copy.canceled += instance.OnCopy;
@@ -570,7 +541,6 @@ public partial class @CustomInput : IInputActionCollection2, IDisposable
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
-        void OnSprint(InputAction.CallbackContext context);
         void OnSpawnMenu(InputAction.CallbackContext context);
         void OnMainMenu(InputAction.CallbackContext context);
         void OnPickup(InputAction.CallbackContext context);
@@ -579,7 +549,7 @@ public partial class @CustomInput : IInputActionCollection2, IDisposable
         void OnSpawnCube(InputAction.CallbackContext context);
         void OnSpawnSphere(InputAction.CallbackContext context);
         void OnSpawnCylinder(InputAction.CallbackContext context);
-        void OnSpawnCapsule(InputAction.CallbackContext context);
+        void OnSpawnPyramid(InputAction.CallbackContext context);
         void OnCopy(InputAction.CallbackContext context);
         void OnPaste(InputAction.CallbackContext context);
     }

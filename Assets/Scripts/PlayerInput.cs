@@ -46,7 +46,7 @@ public class PlayerInput : MonoBehaviour
     public GameObject cubePrefab;
     public GameObject spherePrefab;
     public GameObject cylinderPrefab;
-    public GameObject capsulePrefab;
+    public GameObject pyramidPrefab;
     public Transform spawnPos;
     public Material standard;
     GameObject objectList;
@@ -95,14 +95,13 @@ public class PlayerInput : MonoBehaviour
         playerInputActions.Player.Enable();
         playerInputActions.Player.Jump.performed += Jump;
         playerInputActions.Player.Movement.performed += Movement_performed;
-        playerInputActions.Player.Sprint.performed += Sprint;
         playerInputActions.Player.SpawnMenu.performed += SpawnMenu;
         playerInputActions.Player.MainMenu.performed += MainMenu;
         playerInputActions.Player.Pickup.performed += Pickup_performed;
         playerInputActions.Player.Delete.performed += Delete;
         playerInputActions.Player.Edit.performed += Edit;
         playerInputActions.Player.SpawnCube.performed += SpawnCube;
-        playerInputActions.Player.SpawnCapsule.performed += SpawnCapsule;
+        playerInputActions.Player.SpawnPyramid.performed += SpawnPyramid;
         playerInputActions.Player.SpawnCylinder.performed += SpawnCylinder;
         playerInputActions.Player.SpawnSphere.performed += SpawnSphere;
         playerInputActions.Player.Copy.performed += Copy;
@@ -124,16 +123,6 @@ public class PlayerInput : MonoBehaviour
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
     }
-
-    public void Sprint(InputAction.CallbackContext value)
-    {
-        if (value.performed)
-        {
-            originalSpeed = movementSpeed;
-            movementSpeed = movementSpeed + 5;
-        }
-    }
-
 
     public void SpawnMenu(InputAction.CallbackContext value)
     {
@@ -266,11 +255,11 @@ public class PlayerInput : MonoBehaviour
             newSpawn.transform.parent = objectList.transform;
         }
     }
-    private void SpawnCapsule(InputAction.CallbackContext value)
+    private void SpawnPyramid(InputAction.CallbackContext value)
     {
         if (value.performed)
         {
-            GameObject newSpawn = Instantiate(capsulePrefab, spawnPos);
+            GameObject newSpawn = Instantiate(pyramidPrefab, spawnPos);
             newSpawn.transform.parent = objectList.transform;
         }
     }

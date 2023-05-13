@@ -24,15 +24,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Sprint",
-                    "type": "Button",
-                    "id": "5301a873-a5e1-4ce8-ba9a-e9899b40711a",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Spawn Menu",
                     "type": "Button",
                     "id": "8e0e1921-57d9-44cf-9251-6f838ceba31f",
@@ -105,7 +96,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Spawn Capsule",
+                    "name": "Spawn Pyramid",
                     "type": "Button",
                     "id": "d751fc97-334c-4f24-86a1-64c42786e208",
                     "expectedControlType": "Button",
@@ -196,17 +187,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Jump",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "1b9940e5-b335-447b-9f64-ce43f826c71e",
-                    "path": "<Keyboard>/shift",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Sprint",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -305,7 +285,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Spawn Capsule",
+                    "action": "Spawn Pyramid",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

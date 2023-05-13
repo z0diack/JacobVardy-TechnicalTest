@@ -9,7 +9,7 @@ public class SpawnObject : MonoBehaviour
     public GameObject cube;
     public GameObject sphere;
     public GameObject cylinder;
-    public GameObject capsule;
+    public GameObject pyramid;
 
     [Header("Public Objects")]
     public GameObject player;
@@ -47,9 +47,9 @@ public class SpawnObject : MonoBehaviour
         newSpawn.transform.parent = objectList.transform;
     }
 
-    public void CreateCapsule()
+    public void CreatePyramid()
     {
-        GameObject newSpawn = Instantiate(capsule, spawnPos);
+        GameObject newSpawn = Instantiate(pyramid, spawnPos);
         player.GetComponent<PlayerInput>().itemPicked = newSpawn;
         player.GetComponent<PlayerInput>().ready = false;
         newSpawn.transform.parent = objectList.transform;
