@@ -23,7 +23,7 @@
  https://www.youtube.com/watch?v=EzCTusIDI5Y
 
  # Changes
- Need improve best practices, such as removing GetComponent() from update as well as optimise code.
+ Need improvements to best practices, such as removing GetComponent() from update as well as optimise code.
  
  # References
  Thank you to Key mouse for the skybox:
